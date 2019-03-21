@@ -24,7 +24,10 @@ func (l *List) Execute(ctx *cli.Context) error {
     return errors.Wrap(err, "Error loading configuration")
   }
 
-  req, _ := http.NewRequest("GET", c.Url+"/api/search?type=dash-db", nil)
+  req, _ := http.NewRequest("GET", c.Url+"/api/search", nil)
+  q := req.URL.Query()
+  q.Add("type", "dash-db")
+  req.URL.RawQuery = q.Encode()
   req.Header.Add("Authorization", "Bearer "+c.ApiKey)
   client := &http.Client{}
   resp, err := client.Do(req)
