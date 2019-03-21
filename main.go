@@ -9,9 +9,9 @@ import (
 )
 
 func main() {
-  get := &command.Get{}
-  describe := &command.Describe{}
-  save := &command.Save{}
+	get := &command.Get{}
+	describe := &command.Describe{}
+	save := &command.Save{}
 
 	app := cli.NewApp()
 	app.Name = "grafcli"
@@ -26,20 +26,20 @@ func main() {
 
 	app.Commands = []cli.Command{
 		{
-		  Name: "get",
-		  Usage: "fetch resources from grafana",
-		  Subcommands: get.Commands(),
+			Name:        "get",
+			Usage:       "fetch resources from grafana",
+			Subcommands: get.Commands(),
 		},
-    {
-      Name: "describe",
-      Usage: "describe resources from grafana",
-      Subcommands: describe.Commands(),
-    },
-    {
-      Name: "save",
-      Usage: "save resource to grafana",
-      Subcommands: save.Commands(),
-    },
+		{
+			Name:        "describe",
+			Usage:       "describe resources from grafana",
+			Subcommands: describe.Commands(),
+		},
+		{
+			Name:        "save",
+			Usage:       "save resource to grafana",
+			Subcommands: save.Commands(),
+		},
 	}
 
 	app.CommandNotFound = func(c *cli.Context, command string) {
