@@ -6,9 +6,17 @@ Simple grafana CLI to manage your dashboards easier
    ```
    https://github.com/hajarbleh/grafcli/releases/latest
    ```
-2. Test run your binary
+2. Make the binary executable
+   ```
+   chmod +x ./grafcli
+   ```
+3. Move the binary to your PATH
+   ```
+   sudo mv ./grafcli /usr/local/bin/grafcli
+   ```
+4. Test run your binary
    `grafcli`
-3. Fill config file
+5. Fill config file
    Linux:
    ```
    cd $HOME
