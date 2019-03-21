@@ -1,7 +1,6 @@
 package get
 
 import (
-	"fmt"
 	dashboard "github.com/hajarbleh/grafcli/command/get/dashboard"
 	"github.com/urfave/cli"
 )
