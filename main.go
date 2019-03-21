@@ -9,7 +9,6 @@ import (
 )
 
 func main() {
-	set := &command.Set{}
   get := &command.Get{}
   describe := &command.Describe{}
   save := &command.Save{}
@@ -26,12 +25,6 @@ func main() {
 	}
 
 	app.Commands = []cli.Command{
-		{
-			Name:   "set",
-			Usage:  "set context entry for specified context name",
-			Action: set.Execute,
-			Flags:  set.Flags(),
-		},
 		{
 		  Name: "get",
 		  Usage: "fetch resources from grafana",

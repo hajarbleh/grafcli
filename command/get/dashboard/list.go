@@ -21,6 +21,7 @@ type List struct {
 func (l *List) Execute(ctx *cli.Context) error {
   c, err := config.Read()
   if err != nil {
+    fmt.Println("Error loading configuration")
     return errors.Wrap(err, "Error loading configuration")
   }
 
