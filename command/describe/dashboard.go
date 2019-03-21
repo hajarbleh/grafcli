@@ -25,7 +25,8 @@ func (d *Dashboard) Execute(ctx *cli.Context) error {
 
 	c, err := config.Read()
 	if err != nil {
-		return err
+		fmt.Println(err.Error())
+    return err
 	}
 
 	req, _ := http.NewRequest("GET", c.Url+"/api/dashboards/db/"+dName, nil)
