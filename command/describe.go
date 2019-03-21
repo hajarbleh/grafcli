@@ -14,7 +14,7 @@ func (d *Describe) Commands() []cli.Command {
   return []cli.Command{
     {
       Name:   "dashboard",
-      Usage:  "get dashboard json",
+      Usage:  "get dashboard in yaml format",
       Action: dashboard.Execute,
     },
   }
