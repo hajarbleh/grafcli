@@ -33,6 +33,7 @@ func (l *List) Execute(ctx *cli.Context) error {
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
+    fmt.Sprintf("Error: %s \n", err)
 		return errors.Wrap(err, fmt.Sprintf("Error: %s \n", err))
 	}
 
