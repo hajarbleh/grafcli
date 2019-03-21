@@ -15,7 +15,7 @@ Simple grafana CLI to manage your dashboards easier
    sudo mv ./grafcli /usr/local/bin/grafcli
    ```
 4. Test run your binary
-   `grafcli`
+   ```grafcli```
 5. Fill config file
    Linux:
    ```
