@@ -12,6 +12,7 @@ func main() {
 	get := &command.Get{}
 	describe := &command.Describe{}
 	save := &command.Save{}
+	create := &command.Create{}
 
 	app := cli.NewApp()
 	app.Name = "grafcli"
@@ -39,6 +40,11 @@ func main() {
 			Name:        "save",
 			Usage:       "save resource to grafana",
 			Subcommands: save.Commands(),
+		},
+		{
+			Name: "create",
+			Usage: "create resource in grafana",
+			Subcommands: create.Commands(),
 		},
 	}
 
