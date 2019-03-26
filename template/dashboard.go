@@ -4,10 +4,11 @@ import ()
 
 type Dashboard struct {
   Id          int      `json:"id"`
+  Description string `json:"descrtiption"`
   Title       string   `json:"title"`
   Tags        []string `json:"tags"`
   Timezone    string `json:"timezone"`
-  // Rows        []Rows
+  Rows        []DashboardRow `json:"rows"`
   SchemaVersion int `json:"schemaVersion"`
   Version     int `json:"version"`
 
