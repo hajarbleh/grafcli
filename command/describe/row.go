@@ -61,7 +61,7 @@ func (r *Row) Execute(ctx *cli.Context) error {
   dRow := dashboardExtended.Dashboard.Rows
 
   for _, row := range dRow {
-    if strings.ToLower(row.Title) == rName {
+    if strings.ToLower(row.Title) == strings.ToLower(rName) {
       out, _ := yaml.Marshal(&row)
       fmt.Println(string([]byte(out)))
       return nil
