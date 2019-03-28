@@ -1,4 +1,4 @@
-package get
+package describe
 
 import (
   "encoding/json"
@@ -6,21 +6,27 @@ import (
   "fmt"
   "io/ioutil"
   "net/http"
-  "os"
   "strings"
-  "text/tabwriter"
+  "gopkg.in/yaml.v2"
 
   "github.com/hajarbleh/grafcli/config"
   "github.com/hajarbleh/grafcli/template"
   "github.com/urfave/cli"
 )
 
-type Panels struct {
+type Panel struct {
   DashboardName string
   RowName string
+  PanelName string
 }
 
-func (p *Panels) Execute(ctx *cli.Context) error {
+func (p *Panel) Execute(ctx *cli.Context) error {
+  p.PanelName = ctx.Args().Get(0)
+  if p.PanelName == "" {
+    fmt.Println(errors.New("Error: Panel name is not set!"))
+    return errors.New("Error: Panel name is not set!")
+
+  }
   if p.DashboardName == "" {
     fmt.Println(errors.New("Error: Required flag \"dashboard name\"(-d) are not set!"))
     return errors.New("Error: Required flag \"dashboard name\"(-d) are not set!")
@@ -52,12 +58,12 @@ func (p *Panels) Execute(ctx *cli.Context) error {
     return err
   }
 
-  p.printList(dashboardExtended)
+  p.printPanel(dashboardExtended)
 
   return nil
 }
 
-func (p *Panels) Flags() []cli.Flag {
+func (p *Panel) Flags() []cli.Flag {
   return []cli.Flag{
     cli.StringFlag{
       Name:        "d",
@@ -75,20 +81,23 @@ func (p *Panels) Flags() []cli.Flag {
 
 }
 
-func (p *Panels) printList(dashboardExtended template.DashboardExtended) {
-  w := new(tabwriter.Writer)
-  w.Init(os.Stdout, 0, 8, 0, '\t', 0)
-  fmt.Fprintln(w, "NO.\tPANEL NAME\tROW NAME")
+func (p *Panel) printPanel(dashboardExtended template.DashboardExtended) {
   counter := 0
   for _, row := range dashboardExtended.Dashboard.Rows {
     if p.RowName != "" && strings.ToLower(p.RowName) != strings.ToLower(row.Title) {
       continue
     }
     for _, panel := range row.Panels {
-      counter++
-      fmt.Fprintf(w, "%d\t%s\t%s\n", counter, panel["title"], row.Title)
+      if p.PanelName == panel["title"] {
+        counter++
+        if counter > 1 {
+          fmt.Println("WARNING: multiple panel with same name found. Returning the first...")
+          return
+        }
+
+        out, _ := yaml.Marshal(panel)
+        fmt.Println(string([]byte(out)))
+      }
     }
   }
-  fmt.Fprintln(w)
-  w.Flush()
 }

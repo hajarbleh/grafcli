@@ -11,6 +11,7 @@ type Describe struct {
 func (d *Describe) Commands() []cli.Command {
 	dashboard := describe.Dashboard{}
 	row := describe.Row{}
+	panel := describe.Panel{}
 
 	return []cli.Command{
 		{
@@ -23,6 +24,12 @@ func (d *Describe) Commands() []cli.Command {
 			Usage:  "get row in yaml format",
 			Flags:  row.Flags(),
 			Action: row.Execute,
+		},
+		{
+			Name: "panel",
+			Usage: "get panel in yaml format",
+			Flags: panel.Flags(),
+			Action: panel.Execute,
 		},
 	}
 }
