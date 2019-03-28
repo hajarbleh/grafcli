@@ -5,7 +5,7 @@ import ()
 type DashboardRow struct {
 	Collapse bool        `json:"collapse"`
 	Height   interface{} `json:"height"`
-	//Panels []DashboardPanels `json:"panels"`
+	Panels []map[string]interface{} `json:"panels"`
 	Repeat          *bool  `json:"repeat"`
 	RepeatIteration *int   `json:"repeatIteration"`
 	RepeatRowId     *int   `json:"repeatRowId"`
