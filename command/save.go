@@ -19,10 +19,10 @@ func (s *Save) Commands() []cli.Command {
 			Flags:  dashboard.Flags(),
 		},
 		{
-			Name: "row",
-			Usage: "save row from file",
+			Name:   "row",
+			Usage:  "save row from file",
 			Action: row.Execute,
-			Flags: row.Flags(),
+			Flags:  row.Flags(),
 		},
 	}
 }

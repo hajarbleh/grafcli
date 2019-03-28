@@ -21,7 +21,7 @@ func (d *Describe) Commands() []cli.Command {
 		{
 			Name:   "row",
 			Usage:  "get row in yaml format",
-			Flags: row.Flags(),
+			Flags:  row.Flags(),
 			Action: row.Execute,
 		},
 	}
