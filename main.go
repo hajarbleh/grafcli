@@ -42,8 +42,8 @@ func main() {
 			Subcommands: save.Commands(),
 		},
 		{
-			Name: "create",
-			Usage: "create resource in grafana",
+			Name:        "create",
+			Usage:       "create resource in grafana",
 			Subcommands: create.Commands(),
 		},
 	}
