@@ -3,12 +3,11 @@ package dashboard
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
-	"net/http"
 	"os"
 	"strings"
 	"text/tabwriter"
 
+	"github.com/hajarbleh/grafcli/client"
 	"github.com/hajarbleh/grafcli/config"
 	"github.com/hajarbleh/grafcli/template"
 	"github.com/pkg/errors"
@@ -25,21 +24,13 @@ func (l *List) Execute(ctx *cli.Context) error {
 		return errors.Wrap(err, "Error loading configuration")
 	}
 
-	req, _ := http.NewRequest("GET", c.Url+"/api/search", nil)
-	q := req.URL.Query()
-	q.Add("type", "dash-db")
-	req.URL.RawQuery = q.Encode()
-	req.Header.Add("Authorization", "Bearer "+c.ApiKey)
-	client := &http.Client{}
-	resp, err := client.Do(req)
+	grafana := client.NewGrafana(c.Url, c.ApiKey)
+	body, err := grafana.SearchDashboards()
 	if err != nil {
-		fmt.Sprintf("Error: %s \n", err)
-		return errors.Wrap(err, fmt.Sprintf("Error: %s \n", err))
+		fmt.Println(err)
+		return err
 	}
 
-	defer resp.Body.Close()
-
-	body, _ := ioutil.ReadAll(resp.Body)
 	var dashboardList []template.DashboardList
 	err = json.Unmarshal([]byte(body), &dashboardList)
 	err = printList(dashboardList)

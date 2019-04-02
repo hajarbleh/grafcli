@@ -4,15 +4,13 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"io/ioutil"
-	"net/http"
 	"strings"
 
-	"gopkg.in/yaml.v2"
-
+	"github.com/hajarbleh/grafcli/client"
 	"github.com/hajarbleh/grafcli/config"
 	"github.com/hajarbleh/grafcli/template"
 	"github.com/urfave/cli"
+	"gopkg.in/yaml.v2"
 )
 
 type Panel struct {
@@ -39,18 +37,12 @@ func (p *Panel) Execute(ctx *cli.Context) error {
 		return err
 	}
 
-	req, _ := http.NewRequest("GET", c.Url+"/api/dashboards/db/"+p.DashboardName, nil)
-	req.Header.Add("Authorization", "Bearer "+c.ApiKey)
-	client := &http.Client{}
-	resp, err := client.Do(req)
+	grafana := client.NewGrafana(c.Url, c.ApiKey)
+	body, err := grafana.GetDashboard(p.DashboardName)
 	if err != nil {
-		fmt.Println(err.Error())
+		fmt.Println(err)
 		return err
 	}
-
-	defer resp.Body.Close()
-
-	body, _ := ioutil.ReadAll(resp.Body)
 
 	var dashboardExtended template.DashboardExtended
 	err = json.Unmarshal([]byte(body), &dashboardExtended)
@@ -60,7 +52,6 @@ func (p *Panel) Execute(ctx *cli.Context) error {
 	}
 
 	p.printPanel(dashboardExtended)
-
 	return nil
 }
 

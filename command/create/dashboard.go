@@ -1,13 +1,11 @@
 package create
 
 import (
-	"bytes"
 	"encoding/json"
 	"errors"
 	"fmt"
-	"io/ioutil"
-	"net/http"
 
+	"github.com/hajarbleh/grafcli/client"
 	"github.com/hajarbleh/grafcli/config"
 	"github.com/hajarbleh/grafcli/template"
 	"github.com/urfave/cli"
@@ -29,29 +27,15 @@ func (d *Dashboard) Execute(ctx *cli.Context) error {
 		return err
 	}
 
-	dashboard := template.NewDashboard(dName)
-	dashboardExtended := template.DashboardExtended{Dashboard: dashboard}
-	reqBody, err := json.Marshal(dashboardExtended)
+	jsonDashboard, _ := json.Marshal(template.NewDashboard(dName))
+	grafana := client.NewGrafana(c.Url, c.ApiKey)
+	body, err := grafana.CreateDashboard(string(jsonDashboard), false, "Updated by grafcli")
 	if err != nil {
-		fmt.Println(err.Error())
-		return err
-	}
-	fmt.Println(bytes.NewBuffer(reqBody))
-	req, _ := http.NewRequest("POST", c.Url+"/api/dashboards/db", bytes.NewBuffer(reqBody))
-	req.Header.Add("Authorization", "Bearer "+c.ApiKey)
-	req.Header.Add("Content-Type", "Application/json")
-	client := &http.Client{}
-	resp, err := client.Do(req)
-	if err != nil {
-		fmt.Println(err.Error())
+		fmt.Println(err)
 		return err
 	}
 
-	defer resp.Body.Close()
-
-	body, _ := ioutil.ReadAll(resp.Body)
 	fmt.Println(string([]byte(body)))
-
 	return nil
 }
 

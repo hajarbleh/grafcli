@@ -1,19 +1,16 @@
 package describe
 
 import (
-	//"bytes"
 	"encoding/json"
 	"errors"
 	"fmt"
-	"io/ioutil"
-	"net/http"
 	"strings"
 
-	"gopkg.in/yaml.v2"
-	//"github.com/ghodss/yaml"
+	"github.com/hajarbleh/grafcli/client"
 	"github.com/hajarbleh/grafcli/config"
 	"github.com/hajarbleh/grafcli/template"
 	"github.com/urfave/cli"
+	"gopkg.in/yaml.v2"
 )
 
 type Row struct {
@@ -33,23 +30,13 @@ func (r *Row) Execute(ctx *cli.Context) error {
 		return err
 	}
 
-	req, _ := http.NewRequest("GET", c.Url+"/api/dashboards/db/"+r.DashboardName, nil)
-	req.Header.Add("Authorization", "Bearer "+c.ApiKey)
-	client := &http.Client{}
-	resp, err := client.Do(req)
+	grafana := client.NewGrafana(c.Url, c.ApiKey)
+	body, err := grafana.GetDashboard(r.DashboardName)
 	if err != nil {
-		fmt.Println(err.Error())
+		fmt.Println(err)
 		return err
 	}
 
-	defer resp.Body.Close()
-
-	body, _ := ioutil.ReadAll(resp.Body)
-
-	if resp.StatusCode >= 300 {
-		fmt.Println("Error: " + string([]byte(body)))
-		return nil
-	}
 	var dashboardExtended template.DashboardExtended
 	err = json.Unmarshal([]byte(body), &dashboardExtended)
 
