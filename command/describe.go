@@ -26,9 +26,9 @@ func (d *Describe) Commands() []cli.Command {
 			Action: row.Execute,
 		},
 		{
-			Name: "panel",
-			Usage: "get panel in yaml format",
-			Flags: panel.Flags(),
+			Name:   "panel",
+			Usage:  "get panel in yaml format",
+			Flags:  panel.Flags(),
 			Action: panel.Execute,
 		},
 	}

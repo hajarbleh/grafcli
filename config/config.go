@@ -2,9 +2,10 @@ package config
 
 import (
 	"fmt"
+	"io/ioutil"
+
 	"github.com/pkg/errors"
 	"gopkg.in/yaml.v2"
-	"io/ioutil"
 
 	homedir "github.com/mitchellh/go-homedir"
 )
