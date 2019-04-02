@@ -11,6 +11,7 @@ type Save struct {
 func (s *Save) Commands() []cli.Command {
 	dashboard := save.Dashboard{}
 	row := save.Row{}
+	panel := save.Panel{}
 	return []cli.Command{
 		{
 			Name:   "dashboard",
@@ -23,6 +24,12 @@ func (s *Save) Commands() []cli.Command {
 			Usage:  "save row from file",
 			Action: row.Execute,
 			Flags:  row.Flags(),
+		},
+		{
+			Name:   "panel",
+			Usage:  "save panel from file",
+			Action: panel.Execute,
+			Flags:  panel.Flags(),
 		},
 	}
 }

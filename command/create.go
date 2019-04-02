@@ -11,6 +11,7 @@ type Create struct {
 func (c *Create) Commands() []cli.Command {
 	dashboard := create.Dashboard{}
 	row := create.Row{}
+	panel := create.Panel{}
 	return []cli.Command{
 		{
 			Name:   "dashboard",
@@ -22,6 +23,12 @@ func (c *Create) Commands() []cli.Command {
 			Usage:  "create row in grafana dashboard (will be inserted in bottom row)",
 			Action: row.Execute,
 			Flags:  row.Flags(),
+		},
+		{
+			Name:   "panel",
+			Usage:  "create panel in grafana dashboard",
+			Action: panel.Execute,
+			Flags:  panel.Flags(),
 		},
 	}
 }
