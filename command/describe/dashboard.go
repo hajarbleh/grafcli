@@ -1,14 +1,11 @@
 package describe
 
 import (
-	"bytes"
-	"encoding/json"
 	"errors"
 	"fmt"
-	"io/ioutil"
-	"net/http"
 
 	"github.com/ghodss/yaml"
+	"github.com/hajarbleh/grafcli/client"
 	"github.com/hajarbleh/grafcli/config"
 	"github.com/urfave/cli"
 )
@@ -29,21 +26,13 @@ func (d *Dashboard) Execute(ctx *cli.Context) error {
 		return err
 	}
 
-	req, _ := http.NewRequest("GET", c.Url+"/api/dashboards/db/"+dName, nil)
-	req.Header.Add("Authorization", "Bearer "+c.ApiKey)
-	client := &http.Client{}
-	resp, err := client.Do(req)
+	grafana := client.NewGrafana(c.Url, c.ApiKey)
+	body, err := grafana.GetDashboard(dName)
 	if err != nil {
-		fmt.Println(err.Error())
+		fmt.Println(err)
 		return err
 	}
 
-	defer resp.Body.Close()
-
-	buf := new(bytes.Buffer)
-	body, _ := ioutil.ReadAll(resp.Body)
-
-	err = json.Indent(buf, body, "", "    ")
 	y, err := yaml.JSONToYAML([]byte(body))
 	if err != nil {
 		fmt.Println(err.Error())

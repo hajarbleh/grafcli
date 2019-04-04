@@ -1,16 +1,13 @@
 package save
 
 import (
-	"bytes"
 	"encoding/json"
 	"errors"
 	"fmt"
 	"io/ioutil"
-	"net/http"
-
-	// "strings"
 
 	"github.com/ghodss/yaml"
+	"github.com/hajarbleh/grafcli/client"
 	"github.com/hajarbleh/grafcli/config"
 	"github.com/hajarbleh/grafcli/template"
 	"github.com/urfave/cli"
@@ -47,22 +44,11 @@ func (p *Panel) Execute(ctx *cli.Context) error {
 		return err
 	}
 
-	req, _ := http.NewRequest("GET", c.Url+"/api/dashboards/db/"+p.DashboardName, nil)
-	req.Header.Add("Authorization", "Bearer "+c.ApiKey)
-	client := &http.Client{}
-	resp, err := client.Do(req)
+	grafana := client.NewGrafana(c.Url, c.ApiKey)
+	body, err := grafana.GetDashboard(p.DashboardName)
 	if err != nil {
-		fmt.Println(err.Error())
+		fmt.Println(err)
 		return err
-	}
-
-	body, _ := ioutil.ReadAll(resp.Body)
-
-	resp.Body.Close()
-
-	if resp.StatusCode >= 300 {
-		fmt.Println("Error: " + string([]byte(body)))
-		return nil
 	}
 
 	var dashboardExtended template.DashboardExtended
@@ -80,24 +66,12 @@ func (p *Panel) Execute(ctx *cli.Context) error {
 		}
 	}
 
-	jsonBody, _ := json.Marshal(dashboardExtended)
-	req, _ = http.NewRequest("POST", c.Url+"/api/dashboards/db", bytes.NewBuffer([]byte(jsonBody)))
-	req.Header.Add("Authorization", "Bearer "+c.ApiKey)
-	req.Header.Add("Content-Type", "application/json")
-	client = &http.Client{}
-	resp, err = client.Do(req)
-	if err != nil {
-		fmt.Println(err.Error())
+	jsonDashboard, _ := json.Marshal(dashboardExtended.Dashboard)
+	if _, err := grafana.CreateDashboard(string(jsonDashboard), false, "Updated by grafcli"); err != nil {
+		fmt.Println(err)
 		return err
 	}
 
-	defer resp.Body.Close()
-
-	body, _ = ioutil.ReadAll(resp.Body)
-	if resp.StatusCode >= 300 {
-		fmt.Println("Error: " + string([]byte(body)))
-		return nil
-	}
 	fmt.Println("Panel successfully saved!")
 	return nil
 }
