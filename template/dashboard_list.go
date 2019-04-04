@@ -1,7 +1,5 @@
 package template
 
-import ()
-
 type DashboardList struct {
 	Id          int      `json:"id"`
 	Uid         string   `json:"uid"`
