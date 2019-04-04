@@ -39,13 +39,7 @@ func (r *Row) Execute(ctx *cli.Context) error {
 	var newRow template.DashboardRow
 	_ = yaml.Unmarshal([]byte(data), &newRow)
 
-	c, err := config.Read()
-	if err != nil {
-		fmt.Println(err.Error())
-		return err
-	}
-
-	grafana := client.NewGrafana(c.Url, c.ApiKey)
+	grafana := client.NewGrafana(config.URL, config.APIKey)
 	body, err := grafana.GetDashboard(r.DashboardName)
 	if err != nil {
 		fmt.Println(err)

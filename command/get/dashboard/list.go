@@ -10,7 +10,6 @@ import (
 	"github.com/hajarbleh/grafcli/client"
 	"github.com/hajarbleh/grafcli/config"
 	"github.com/hajarbleh/grafcli/template"
-	"github.com/pkg/errors"
 	"github.com/urfave/cli"
 )
 
@@ -18,13 +17,7 @@ type List struct {
 }
 
 func (l *List) Execute(ctx *cli.Context) error {
-	c, err := config.Read()
-	if err != nil {
-		fmt.Println("Error loading configuration")
-		return errors.Wrap(err, "Error loading configuration")
-	}
-
-	grafana := client.NewGrafana(c.Url, c.ApiKey)
+	grafana := client.NewGrafana(config.URL, config.APIKey)
 	body, err := grafana.SearchDashboards()
 	if err != nil {
 		fmt.Println(err)

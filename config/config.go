@@ -3,6 +3,7 @@ package config
 import (
 	"fmt"
 	"io/ioutil"
+	"os"
 
 	"github.com/pkg/errors"
 	"gopkg.in/yaml.v2"
@@ -10,28 +11,33 @@ import (
 	homedir "github.com/mitchellh/go-homedir"
 )
 
-type Config struct {
-	Url    string `yaml:"url"`
-	ApiKey string `yaml:"api_key"`
-}
+// Config variables.
+var (
+	URL    string
+	APIKey string
+)
 
-func Read() (*Config, error) {
+func init() {
 	homeDir, err := homedir.Dir()
 	if err != nil {
-		return nil, errors.Wrap(err, fmt.Sprintf("Cannot get home directory"))
+		fmt.Println(errors.Wrap(err, "Cannot get home directory"))
+		os.Exit(1)
 	}
 
 	defaultConfigPath := homeDir + "/.grafcli/config"
 	dat, err := ioutil.ReadFile(defaultConfigPath)
 	if err != nil {
-		return nil, errors.Wrap(err, fmt.Sprintf("Fatal error config file: %s \n", err))
+		fmt.Println(errors.Wrap(err, "Fatal error config file"))
+		os.Exit(1)
 	}
 
-	c := new(Config)
+	c := map[string]string{}
 	err = yaml.Unmarshal(dat, &c)
 	if err != nil {
-		return nil, errors.Wrap(err, fmt.Sprintf("Unmarshall: %s \n", err))
+		fmt.Println(errors.Wrap(err, "Unmarshall"))
+		os.Exit(1)
 	}
 
-	return c, nil
+	URL = c["url"]
+	APIKey = c["api_key"]
 }

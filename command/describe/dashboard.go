@@ -20,13 +20,7 @@ func (d *Dashboard) Execute(ctx *cli.Context) error {
 		return errors.New("must specify dashboard name")
 	}
 
-	c, err := config.Read()
-	if err != nil {
-		fmt.Println(err.Error())
-		return err
-	}
-
-	grafana := client.NewGrafana(c.Url, c.ApiKey)
+	grafana := client.NewGrafana(config.URL, config.APIKey)
 	body, err := grafana.GetDashboard(dName)
 	if err != nil {
 		fmt.Println(err)

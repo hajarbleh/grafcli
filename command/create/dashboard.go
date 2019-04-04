@@ -21,14 +21,8 @@ func (d *Dashboard) Execute(ctx *cli.Context) error {
 		return errors.New("must specify dashboard name")
 	}
 
-	c, err := config.Read()
-	if err != nil {
-		fmt.Println(err.Error())
-		return err
-	}
-
 	jsonDashboard, _ := json.Marshal(template.NewDashboard(dName))
-	grafana := client.NewGrafana(c.Url, c.ApiKey)
+	grafana := client.NewGrafana(config.URL, config.APIKey)
 	body, err := grafana.CreateDashboard(string(jsonDashboard), false, "Updated by grafcli")
 	if err != nil {
 		fmt.Println(err)

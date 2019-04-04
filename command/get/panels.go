@@ -25,13 +25,7 @@ func (p *Panels) Execute(ctx *cli.Context) error {
 		return errors.New("Error: Required flag \"dashboard name\"(-d) are not set!")
 	}
 
-	c, err := config.Read()
-	if err != nil {
-		fmt.Println(err.Error())
-		return err
-	}
-
-	grafana := client.NewGrafana(c.Url, c.ApiKey)
+	grafana := client.NewGrafana(config.URL, config.APIKey)
 	body, err := grafana.GetDashboard(p.DashboardName)
 	if err != nil {
 		fmt.Println(err)

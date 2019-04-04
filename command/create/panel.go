@@ -32,12 +32,6 @@ func (p *Panel) Execute(ctx *cli.Context) error {
 		return errors.New("Error: Required flag \"row name\"(-r) are not set!")
 	}
 
-	c, err := config.Read()
-	if err != nil {
-		fmt.Println(err.Error())
-		return err
-	}
-
 	interaction := utility.Interaction{
 		Reader: os.Stdin,
 	}
@@ -57,7 +51,7 @@ func (p *Panel) Execute(ctx *cli.Context) error {
 		return nil
 	}
 
-	grafana := client.NewGrafana(c.Url, c.ApiKey)
+	grafana := client.NewGrafana(config.URL, config.APIKey)
 	body, err := grafana.GetDashboard(p.DashboardName)
 	if err != nil {
 		fmt.Println(err)

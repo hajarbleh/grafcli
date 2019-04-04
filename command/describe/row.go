@@ -24,13 +24,7 @@ func (r *Row) Execute(ctx *cli.Context) error {
 		return errors.New("must specify row name")
 	}
 
-	c, err := config.Read()
-	if err != nil {
-		fmt.Println(err.Error())
-		return err
-	}
-
-	grafana := client.NewGrafana(c.Url, c.ApiKey)
+	grafana := client.NewGrafana(config.URL, config.APIKey)
 	body, err := grafana.GetDashboard(r.DashboardName)
 	if err != nil {
 		fmt.Println(err)
