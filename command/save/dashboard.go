@@ -33,13 +33,7 @@ func (d *Dashboard) Execute(ctx *cli.Context) error {
 		return err
 	}
 
-	c, err := config.Read()
-	if err != nil {
-		fmt.Println(err.Error())
-		return err
-	}
-
-	grafana := client.NewGrafana(c.Url, c.ApiKey)
+	grafana := client.NewGrafana(config.URL, config.APIKey)
 	if _, err := grafana.CreateDashboard(string(jsonBody), false, "Updated by grafcli"); err != nil {
 		fmt.Println(err)
 		return err

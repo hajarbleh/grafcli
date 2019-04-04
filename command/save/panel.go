@@ -38,13 +38,7 @@ func (p *Panel) Execute(ctx *cli.Context) error {
 	var newPanel map[string]interface{}
 	_ = yaml.Unmarshal([]byte(data), &newPanel)
 
-	c, err := config.Read()
-	if err != nil {
-		fmt.Println(err.Error())
-		return err
-	}
-
-	grafana := client.NewGrafana(c.Url, c.ApiKey)
+	grafana := client.NewGrafana(config.URL, config.APIKey)
 	body, err := grafana.GetDashboard(p.DashboardName)
 	if err != nil {
 		fmt.Println(err)
