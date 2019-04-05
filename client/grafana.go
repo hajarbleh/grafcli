@@ -23,7 +23,7 @@ func NewGrafana(host, apiKey string) *Grafana {
 // be in JSON string format.
 func (g *Grafana) CreateDashboard(dashboard string, overwrite bool, msg string) (respBody []byte, err error) {
 	body := fmt.Sprintf(
-		`{dashboard:%v,overwrite:%v,message,%v}`,
+		`{"dashboard":%v,"overwrite":%v,"message":"%v"}`,
 		dashboard, overwrite, msg,
 	)
 	return g.doHTTPReq(http.MethodPost, "/api/dashboards/db", []byte(body))
