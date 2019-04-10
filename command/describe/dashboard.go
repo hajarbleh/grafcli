@@ -10,7 +10,7 @@ import (
 	"github.com/hajarbleh/grafcli/utility"
 	"github.com/pkg/errors"
 	"github.com/urfave/cli"
-	"gopkg.in/yaml.v2"
+	"github.com/ghodss/yaml"
 )
 
 type Dashboard struct {

@@ -10,7 +10,7 @@ import (
 	"github.com/hajarbleh/grafcli/config"
 	"github.com/hajarbleh/grafcli/template"
 	"github.com/urfave/cli"
-	"gopkg.in/yaml.v2"
+	"github.com/ghodss/yaml"
 )
 
 type Panel struct {
