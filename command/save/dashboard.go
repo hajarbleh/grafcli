@@ -7,16 +7,17 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/ghodss/yaml"
 	"github.com/hajarbleh/grafcli/client"
 	"github.com/hajarbleh/grafcli/config"
 	"github.com/hajarbleh/grafcli/utility"
 	"github.com/pkg/errors"
 	"github.com/urfave/cli"
-	"github.com/ghodss/yaml"
 )
 
 type Dashboard struct {
-	Filename string
+	Filename  string
+	Overwrite bool
 }
 
 func (d *Dashboard) Execute(ctx *cli.Context) error {
@@ -38,7 +39,7 @@ func (d *Dashboard) Execute(ctx *cli.Context) error {
 	}
 
 	grafana := client.NewGrafana(config.URL, config.APIKey)
-	if _, err := grafana.CreateDashboard(string(jsonDashboard), false, "Updated by grafcli"); err != nil {
+	if _, err := grafana.CreateDashboard(string(jsonDashboard), d.Overwrite, "Updated by grafcli"); err != nil {
 		fmt.Println(err)
 		return err
 	}
@@ -123,6 +124,11 @@ func (d *Dashboard) Flags() []cli.Flag {
 			Usage:       "Dashboard YAML filename to be saved to Grafana",
 			Value:       "",
 			Destination: &d.Filename,
+		},
+		cli.BoolFlag{
+			Name:        "overwrite",
+			Usage:       "Overwrite existing dashboard with newer version or with same dashboard title",
+			Destination: &d.Overwrite,
 		},
 	}
 }
