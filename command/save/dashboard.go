@@ -7,12 +7,12 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/ghodss/yaml"
 	"github.com/hajarbleh/grafcli/client"
 	"github.com/hajarbleh/grafcli/config"
 	"github.com/hajarbleh/grafcli/utility"
 	"github.com/pkg/errors"
 	"github.com/urfave/cli"
-	"github.com/ghodss/yaml"
 )
 
 type Dashboard struct {

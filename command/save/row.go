@@ -7,11 +7,11 @@ import (
 	"io/ioutil"
 	"strings"
 
+	"github.com/ghodss/yaml"
 	"github.com/hajarbleh/grafcli/client"
 	"github.com/hajarbleh/grafcli/config"
 	"github.com/hajarbleh/grafcli/template"
 	"github.com/urfave/cli"
-	"github.com/ghodss/yaml"
 )
 
 type Row struct {

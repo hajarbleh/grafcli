@@ -5,8 +5,8 @@ import (
 	"io/ioutil"
 	"os"
 
-	"github.com/pkg/errors"
 	"github.com/ghodss/yaml"
+	"github.com/pkg/errors"
 
 	homedir "github.com/mitchellh/go-homedir"
 )
